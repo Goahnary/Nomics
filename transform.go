@@ -74,7 +74,6 @@ func main() {
 		header := []string{"currency", "timestamp", "price"}
 		w.Write(header)
 		for _, obj := range result {
-		//	fmt.Println(obj)
 			var record []string
 			record = append(record, obj["currency"], obj["timestamp"], obj["price"])
 			w.Write(record)
@@ -86,5 +85,26 @@ func main() {
 	}
 	allData, _ := json.Marshal(allPrices)
 	ioutil.WriteFile("coin-prices.json", allData, 0644)
+
+	//Also write to csv
+	csvName := "coin-prices.csv"
+	f, err := os.Create(csvName)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer f.Close()
+
+	w := csv.NewWriter(f)
+
+	//write header
+	header := []string{"currency", "timestamp", "price"}
+	w.Write(header)
+	for _, obj := range allPrices {
+		var record []string
+		record = append(record, obj["currency"], obj["timestamp"], obj["price"])
+		w.Write(record)
+		record = nil
+	}
+	w.Flush()
 }
 
