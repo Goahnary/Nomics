@@ -9,7 +9,7 @@ import (
 func main() {
 
 	//read json data for transformation
-	var jsonCoinPrices, err = ioutil.ReadFile("result.json")
+	var jsonCoinPrices, err = ioutil.ReadFile("price-data.json")
 
 	if err != nil {
 		log.Fatal(err)
@@ -28,25 +28,37 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//Iterate over the timestamps to transform into something BI Tools can ingest
-	n := 0
-	priceArrayLength := len(prices[0].Timestamps)
-	result := make([]map[string]string, priceArrayLength)
-	for n < priceArrayLength {
-		//add row to array
-		coinPrice := map[string]string{
-			"currency":prices[0].Currency,
-			"timestamp":prices[0].Timestamps[n],
-			"price":prices[0].Prices[n],
+	allPrices := make([]map[string]string, 0)
+
+	i := 0
+	for i < len(prices) {
+		//Iterate over the timestamps to transform into something BI Tools can ingest
+		n := 0
+		priceArrayLength := len(prices[i].Timestamps)
+		result := make([]map[string]string, priceArrayLength)
+		for n < priceArrayLength {
+			//add row to array
+			coinPrice := map[string]string{
+				"currency":prices[i].Currency,
+				"timestamp":prices[i].Timestamps[n],
+				"price":prices[i].Prices[n],
+			}
+
+			result[n] = coinPrice
+			n += 1
 		}
 
-		result[n] = coinPrice
-		n += 1
+		//collect for mass export of data
+		allPrices = append(allPrices, result...)
+
+		//encode result map to JSON
+		data, _ := json.Marshal(result)
+
+		fname := prices[i].Currency + "-prices.json"
+		ioutil.WriteFile(fname, data, 0644)
+		i += 1
 	}
-
-	//encode result map to JSON
-	data, _ := json.Marshal(result)
-
-	ioutil.WriteFile("coin-prices.json", data, 0644)
+	allData, _ := json.Marshal(allPrices)
+	ioutil.WriteFile("coin-prices.json", allData, 0644)
 }
 
