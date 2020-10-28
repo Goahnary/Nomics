@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 )
 
 func main() {
@@ -12,7 +12,7 @@ func main() {
 	var jsonCoinPrices, err = ioutil.ReadFile("result.json")
 
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Fatal(err)
 	}
 
 	//create structure to unpack json data into
@@ -24,13 +24,9 @@ func main() {
 
 	var prices []Price
 	//Extract json into struct
-	erro := json.Unmarshal(jsonCoinPrices, &prices)
-
-	if erro != nil {
-		fmt.Println("error:", erro)
+	if err := json.Unmarshal(jsonCoinPrices, &prices); err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println("%v", prices)
-	fmt.Println()
 
 	//Iterate over the timestamps to transform into something BI Tools can ingest
 	n := 0
@@ -48,12 +44,8 @@ func main() {
 		n += 1
 	}
 
-	fmt.Println()
-
 	//encode result map to JSON
 	data, _ := json.Marshal(result)
-
-	fmt.Println(string(data))
 
 	ioutil.WriteFile("coin-prices.json", data, 0644)
 }
