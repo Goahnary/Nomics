@@ -21,6 +21,7 @@ This will send a get request to the `sparkline` endpoint through the Nomics API
 We will transform that data with the `transform.go` script.
 
 The result will be in a file called `[currency]-prices.json`. All prices can be found in `coin-prices.json`.
+They have also been exported to csv as well!
 
 It should look like this:
 
