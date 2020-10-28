@@ -2,8 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"encoding/csv"
 	"io/ioutil"
+	"fmt"
 	"log"
+	"os"
 )
 
 func main() {
@@ -56,7 +59,30 @@ func main() {
 
 		fname := prices[i].Currency + "-prices.json"
 		ioutil.WriteFile(fname, data, 0644)
-		i += 1
+
+		//Also write to csv
+		csvName := prices[i].Currency + "-prices.csv"
+		f, err := os.Create(csvName)
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer f.Close()
+
+		w := csv.NewWriter(f)
+
+		//write header
+		header := []string{"currency", "timestamp", "price"}
+		w.Write(header)
+		for _, obj := range result {
+		//	fmt.Println(obj)
+			var record []string
+			record = append(record, obj["currency"], obj["timestamp"], obj["price"])
+			w.Write(record)
+			record = nil
+		}
+		w.Flush()
+
+		i += 1 //Always increment last
 	}
 	allData, _ := json.Marshal(allPrices)
 	ioutil.WriteFile("coin-prices.json", allData, 0644)
