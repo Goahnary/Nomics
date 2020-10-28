@@ -56,5 +56,5 @@ curl -s -o price-data.json -XGET "https://api.nomics.com/v1/currencies/sparkline
 
 The data is stored in a file called `price-data.json`
 
-It is then transformed to the final form by `transform.go` and is stored in `BTC-prices.json`.
+It is then transformed to the final form by `transform.go` and is stored in `BTC-prices.json` and `BTC-prices.csv`.
 This row-like format should be ingestible by BI Tools.
