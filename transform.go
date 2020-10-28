@@ -34,8 +34,9 @@ func main() {
 
 	//Iterate over the timestamps to transform into something BI Tools can ingest
 	n := 0
-	result := make(map[int][]map[string]string)
-	for n < len(prices[0].Timestamps) {
+	priceArrayLength := len(prices[0].Timestamps)
+	result := make([]map[string]string, priceArrayLength)
+	for n < priceArrayLength {
 		//add row to array
 		coinPrice := map[string]string{
 			"currency":prices[0].Currency,
@@ -43,7 +44,7 @@ func main() {
 			"price":prices[0].Prices[n],
 		}
 
-		result[n] = append(result[n], coinPrice)
+		result[n] = coinPrice
 		n += 1
 	}
 
@@ -53,5 +54,7 @@ func main() {
 	data, _ := json.Marshal(result)
 
 	fmt.Println(string(data))
+
+	ioutil.WriteFile("coin-prices.json", data, 0644)
 }
 
