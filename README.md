@@ -34,3 +34,26 @@ It should look like this:
 {"currency":"BTC","price":"13745.47312077","timestamp":"2020-10-26T00:00:00Z"}
 ]
 ```
+
+### Explaination
+
+**Json Payload:** Instead of sending json payload I just pass a query string.
+
+The keys and values of the query string:
+```
+key=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ids=BTC,ETH,XRP
+start=2020-01-01T00%3A00%3A00Z (first day of the year)
+end=2020-10-28T00%3A00%3A00Z (current date)
+```
+
+I send this as a curl GET request
+
+```
+curl -s -o price-data.json -XGET "https://api.nomics.com/v1/currencies/sparkline?key=${NOMIC_API_KEY}&ids=BTC,ETH,XRP&start=${startDate}&end=${stopDate}
+```
+
+The data is stored in a file called `price-data.json`
+
+It is then transformed to the final form by `transform.go` and is stored in `BTC-prices.json`.
+This row-like format should be ingestible by BI Tools.
