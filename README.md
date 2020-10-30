@@ -58,3 +58,6 @@ The data is stored in a file called `price-data.json`
 
 It is then transformed to the final form by `transform.go` and is stored in `BTC-prices.json` and `BTC-prices.csv`.
 This row-like format should be ingestible by BI Tools.
+
+
+Small example of graphing this data using Google Data Studio: https://datastudio.google.com/reporting/8974ac4c-0b37-4794-8199-f63c3e9ce045
