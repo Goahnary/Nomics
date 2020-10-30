@@ -61,3 +61,17 @@ This row-like format should be ingestible by BI Tools.
 
 
 Small example of graphing this data using Google Data Studio: https://datastudio.google.com/reporting/8974ac4c-0b37-4794-8199-f63c3e9ce045
+
+The above example pulls data from my Google Cloud Storage bucket.
+
+**Follow up questions**
+
+> If you were to automate an ETL pipeline for this data into a Business Analytics Tool for non-technical user consumption on an on-going basis, how would you do that?
+
+
+If I were to automate this ETL job, with it being a very small job, I would probably set up a google cloud function to run weekly and update the data in a google cloud storage bucket. I'd then also create another cloud function to transform the data like the transform.go file does in this repository. I would then pull from that into the Google Data Studio (GDS) page above. To the user their data is always availiable in the GDS document.
+
+**Diagram of data flow:**
+
+![ETL Diagram](diagram.png)
+
